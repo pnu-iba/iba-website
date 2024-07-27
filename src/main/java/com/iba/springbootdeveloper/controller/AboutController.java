@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class HomeController {
-    @GetMapping("/home")
+public class AboutController {
+    @GetMapping("/about")
     @ResponseBody
-    public String home() {
-        return "여기가 홈 화면입니다.";
+    public String about() {
+        return "동아리 소개";
     }
 }

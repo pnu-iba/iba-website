@@ -1,3 +1,3 @@
-INSERT INTO article (title, content) VALUES ('제목 1', '내용 1')
-INSERT INTO article (title, content) VALUES ('제목 2', '내용 2')
+INSERT INTO article (title, content) VALUES ('박준형', '박준형')
+INSERT INTO article (title, content) VALUES ('박민규', '박민규')
 INSERT INTO article (title, content) VALUES ('IBA', '웹사이트 만들기')
