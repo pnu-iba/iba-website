@@ -14,6 +14,14 @@ if (deleteButton) {
     });
 }
 
+// 하이퍼링크 변환 함수
+function transformLinks(text) {
+    var urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(urlPattern, function(url) {
+        return `<a href="${url}" target="_blank">${url}</a>`;
+    });
+}
+
 // 수정 기능
 const modifyButton = document.getElementById('modify-btn');
 
@@ -24,7 +32,7 @@ if (modifyButton) {
 
         let contentElement = document.getElementById('content');
         let content = contentElement.value;
-        let formattedContent = content.replace(/\n/g, '<br>');
+        let formattedContent = transformLinks(content.replace(/\n/g, '<br>'));
 
         fetch(`/api/articles/${id}`, {
             method: 'PUT',
@@ -50,7 +58,7 @@ if (createButton) {
     createButton.addEventListener('click', event => {
         let contentElement = document.getElementById('content');
         let content = contentElement.value;
-        let formattedContent = content.replace(/\n/g, '<br>');
+        let formattedContent = transformLinks(content.replace(/\n/g, '<br>'));
 
         fetch('/api/articles', {
             method: 'POST',

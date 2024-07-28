@@ -1,3 +1,3 @@
+INSERT INTO article (title, content, created_at, updated_at) VALUES ('6기 분류 프로젝트', '[프로젝트 기간] 2024.07.28~ 2024.08.28<br>[프로젝트 인원] 김민철, 박민규, 이민준, 이홍근<br>[프로젝트 개요] 분류 알고리즘 학습<br>[배운 점] 전처리<br>[아쉬운 점] 결과<br>[프로젝트 URL]<a href="https://bit.ly/3zZTEeV" target="_blank">https://bit.ly/3zZTEeV</a>', NOW(), NOW())
 INSERT INTO article (title, content, created_at, updated_at) VALUES ('박준형', '박준형', NOW(), NOW())
 INSERT INTO article (title, content, created_at, updated_at) VALUES ('박민규', '박민규', NOW(), NOW())
-INSERT INTO article (title, content, created_at, updated_at) VALUES ('IBA', '웹사이트 만들기', NOW(), NOW())
