@@ -1,6 +1,7 @@
 package com.iba.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,8 @@ public class Article {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 5000)
+    @Size(max = 1000)
     private String content;
 
     @CreatedDate

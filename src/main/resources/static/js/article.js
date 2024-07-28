@@ -22,6 +22,10 @@ if (modifyButton) {
         let params = new URLSearchParams(location.search);
         let id = params.get('id');
 
+        let contentElement = document.getElementById('content');
+        let content = contentElement.value;
+        let formattedContent = content.replace(/\n/g, '<br>');
+
         fetch(`/api/articles/${id}`, {
             method: 'PUT',
             headers: {
@@ -29,7 +33,7 @@ if (modifyButton) {
             },
             body: JSON.stringify({
                 title: document.getElementById('title').value,
-                content: document.getElementById('content').value
+                content: formattedContent
             })
         })
             .then(() => {
@@ -44,6 +48,10 @@ const createButton = document.getElementById('create-btn');
 
 if (createButton) {
     createButton.addEventListener('click', event => {
+        let contentElement = document.getElementById('content');
+        let content = contentElement.value;
+        let formattedContent = content.replace(/\n/g, '<br>');
+
         fetch('/api/articles', {
             method: 'POST',
             headers: {
@@ -51,7 +59,7 @@ if (createButton) {
             },
             body: JSON.stringify({
                 title: document.getElementById('title').value,
-                content: document.getElementById('content').value
+                content: formattedContent
             })
         })
             .then(() => {

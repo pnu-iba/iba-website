@@ -21,7 +21,7 @@
                         <div class="text-muted mb-2" th:text="|작성 일시 ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|"></div>
                     </header>
                     <section class="mb-5">
-                        <p class="fs-5 mb-4" th:text="${article.content}"></p>
+                        <p class="fs-5 mb-4" th:utext="${article.content}"></p>
                     </section>
                     <button type="button" id="modify-btn"
                             th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|"
