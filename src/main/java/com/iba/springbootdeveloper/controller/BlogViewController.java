@@ -1,17 +1,15 @@
 package com.iba.springbootdeveloper.controller;
 
 import com.iba.springbootdeveloper.domain.Article;
-import com.iba.springbootdeveloper.dto.ArticleListViewResponse;
 import com.iba.springbootdeveloper.dto.ArticleViewResponse;
 import com.iba.springbootdeveloper.service.BlogService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -20,14 +18,14 @@ public class BlogViewController {
     private final BlogService blogService;
 
     @GetMapping("/articles")
-    public String getArticles(Model model){
-        List<ArticleListViewResponse> articles = blogService.findAll().stream()
-                .map(ArticleListViewResponse::new)
-                .toList();
-        model.addAttribute("articles", articles);
+    public String getArticles(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Article> paging = blogService.getList(page);
+        model.addAttribute("paging", paging);
+        model.addAttribute("currentPage", page); // To keep track of the current page
 
         return "articleList";
     }
+
 
     @GetMapping("/articles/{id}")
     public String getArticle(@PathVariable ("id") Long id, Model model){

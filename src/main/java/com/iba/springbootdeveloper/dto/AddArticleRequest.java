@@ -1,8 +1,9 @@
 package com.iba.springbootdeveloper.dto;
+
+import com.iba.springbootdeveloper.domain.Article;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.iba.springbootdeveloper.domain.Article;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,6 +11,7 @@ import com.iba.springbootdeveloper.domain.Article;
 public class AddArticleRequest {
     private String title;
     private String content;
+
     public Article toEntity() {
         return Article.builder()
                 .title(title)

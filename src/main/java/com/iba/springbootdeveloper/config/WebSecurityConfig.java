@@ -29,7 +29,8 @@ public class WebSecurityConfig {
                 .requestMatchers(toH2Console())
                 .requestMatchers(new AntPathRequestMatcher("/static/**"))
                 .requestMatchers(new AntPathRequestMatcher("/css/**"))
-                .requestMatchers(new AntPathRequestMatcher("/js/**"));
+                .requestMatchers(new AntPathRequestMatcher("/js/**"))
+                .requestMatchers(new AntPathRequestMatcher("/images/**"));
     }
 
     @Bean
@@ -41,7 +42,8 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/signup"),
                                 new AntPathRequestMatcher("/user"),
                                 new AntPathRequestMatcher("/about"),
-                                new AntPathRequestMatcher("/articles")
+                                new AntPathRequestMatcher("/articles"),
+                                new AntPathRequestMatcher("/articles/{id}")
 
                         ).permitAll()
                         .anyRequest().authenticated())
