@@ -1,6 +1,7 @@
 package com.iba.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,11 +23,13 @@ public class Article {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @NotNull(message = "제목은 필수 항목입니다.")
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false, length = 5000)
-    @Size(max = 1000)
+    @NotNull(message = "내용은 필수 항목입니다.")
+    @Column(name = "content", nullable = false)
+    @Size(max = 1000, message = "내용은 최대 1000자까지 가능합니다.")
     private String content;
 
     @CreatedDate
@@ -37,15 +40,20 @@ public class Article {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @NotNull(message = "카테고리는 필수 항목입니다.")
+    @Column(name = "category", nullable = false)
+    private String category;
+
     @Builder
-    public Article(String title, String content) {
+    public Article(String title, String content, String category) {
         this.title = title;
         this.content = content;
+        this.category = category;
     }
 
-    public void update(String title, String content) {
-        this.title= title;
+    public void update(String title, String content, String category) {
+        this.title = title;
         this.content = content;
+        this.category = category;
     }
-
 }

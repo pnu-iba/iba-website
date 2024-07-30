@@ -41,7 +41,8 @@ if (modifyButton) {
             },
             body: JSON.stringify({
                 title: document.getElementById('title').value,
-                content: formattedContent
+                content: formattedContent,
+                category: document.getElementById('category').value // 수정: value 속성으로 변경
             })
         })
             .then(() => {
@@ -67,7 +68,8 @@ if (createButton) {
             },
             body: JSON.stringify({
                 title: document.getElementById('title').value,
-                content: formattedContent
+                content: formattedContent,
+                category: document.getElementById('category').value // 수정: value 속성으로 변경
             })
         })
             .then(() => {

@@ -1,6 +1,5 @@
 package com.iba.springbootdeveloper.service;
 
-
 import com.iba.springbootdeveloper.domain.Article;
 import com.iba.springbootdeveloper.dto.AddArticleRequest;
 import com.iba.springbootdeveloper.dto.UpdateArticleRequest;
@@ -30,13 +29,13 @@ public class BlogService {
         return blogRepository.save(request.toEntity());
     }
 
-    public List<Article> findAll(){
+    public List<Article> findAll() {
         return blogRepository.findAll();
     }
 
-    public Article findById(long id){
+    public Article findById(long id) {
         return blogRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("not found: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
     }
 
     public void delete(long id) {
@@ -47,27 +46,34 @@ public class BlogService {
     public Article update(long id, UpdateArticleRequest request) {
         Article article = blogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
-        article.update(request.getTitle(), request.getContent());
+        article.update(request.getTitle(), request.getContent(), request.getCategory());
         return article;
     }
-    public Page<Article> getList(int page ,String kw) {
+
+    public Page<Article> getList(int page, String kw, String category) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createdAt"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        Specification<Article> spec = search(kw);
+        Specification<Article> spec = search(kw, category);
         return blogRepository.findAll(spec, pageable);
     }
 
-    private Specification<Article> search(String keyword) {
-        return new Specification<>() {
-            private static final long serialVersionUID = 1L;
+    private Specification<Article> search(String keyword, String category) {
+        return (Root<Article> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-            @Override
-            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                query.distinct(true);  // 중복 제거
-                return cb.or(cb.like(root.get("title"), "%" + keyword + "%"),  // 제목 검색
-                        cb.like(root.get("content"), "%" + keyword + "%"));  // 내용 검색
+            if (keyword != null && !keyword.isEmpty()) {
+                predicates.add(cb.or(
+                        cb.like(root.get("title"), "%" + keyword + "%"),
+                        cb.like(root.get("content"), "%" + keyword + "%")
+                ));
             }
+
+            if (category != null && !category.isEmpty()) {
+                predicates.add(cb.equal(root.get("category"), category));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

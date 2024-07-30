@@ -20,11 +20,23 @@
                         <input type="text" class="form-control" placeholder="제목" id="title"
                                th:value="${article.title}">
                     </header>
+                    <div>
+                        <select id="category" name="category" class="form-select">
+                            <option value="">카테고리를 선택해주세요</option>
+                            <option value="교육세션" th:selected="${article.category == '교육세션'}">교육세션</option>
+                            <option value="정규세션" th:selected="${article.category == '정규세션'}">정규세션</option>
+                            <option value="공모전" th:selected="${article.category == '공모전'}">공모전</option>
+                            <option value="개인" th:selected="${article.category == '개인'}">개인</option>
+                            <option value="기타" th:selected="${article.category == '기타'}">기타</option>
+                        </select>
+                    </div>
+                    <div class="mb-4"></div>
                     <section class="mb-5">
                         <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${article.content}"></textarea>
                     </section>
                     <button th:if="${article.id} != null" type="button" id="modify-btn" class="btn btn-primary btn-sm">수정</button>
                     <button th:if="${article.id} == null" type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
+                    <div class="mb-4"></div>
                 </article>
             </div>
         </div>

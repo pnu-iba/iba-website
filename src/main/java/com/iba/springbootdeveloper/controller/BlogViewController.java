@@ -18,32 +18,50 @@ public class BlogViewController {
     private final BlogService blogService;
 
     @GetMapping("/articles")
-    public String getArticles(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                              @RequestParam(value = "kw", defaultValue = "") String kw) {
-        Page<Article> paging = blogService.getList(page,kw  );
+    public String getArticles(Model model,
+                              @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "kw", defaultValue = "") String kw,
+                              @RequestParam(value = "category", required = false) String category) {
+        Page<Article> paging = blogService.getList(page, kw, category);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
-        model.addAttribute("currentPage", page); // To keep track of the current page
+        model.addAttribute("category", category);
+        model.addAttribute("currentPage", page);
 
         return "articleList";
     }
 
+    @GetMapping("/articles/category/{category}")
+    public String getArticlesByCategory(@PathVariable("category") String category,
+                                        Model model,
+                                        @RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Article> paging = blogService.getList(page, kw, category);
+        model.addAttribute("paging", paging);
+        model.addAttribute("category", category);
+        model.addAttribute("kw", kw);
+        model.addAttribute("currentPage", page);
+
+        return "articleList";
+    }
 
     @GetMapping("/articles/{id}")
-    public String getArticle(@PathVariable ("id") Long id, Model model){
+    public String getArticle(@PathVariable("id") Long id, Model model) {
         Article article = blogService.findById(id);
         model.addAttribute("article", new ArticleViewResponse(article));
+        model.addAttribute("category", article.getCategory());
 
         return "article";
     }
 
     @GetMapping("/new-article")
-    public String newArticle(@RequestParam(name = "id",required = false) Long id, Model model){
-        if(id==null) {
+    public String newArticle(@RequestParam(name = "id", required = false) Long id, Model model) {
+        if (id == null) {
             model.addAttribute("article", new ArticleViewResponse());
-        }else{
+        } else {
             Article article = blogService.findById(id);
             model.addAttribute("article", new ArticleViewResponse(article));
+            model.addAttribute("category", article.getCategory());
         }
         return "newArticle";
     }
