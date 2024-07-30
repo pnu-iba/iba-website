@@ -5,12 +5,17 @@ import com.iba.springbootdeveloper.domain.Article;
 import com.iba.springbootdeveloper.dto.AddArticleRequest;
 import com.iba.springbootdeveloper.dto.UpdateArticleRequest;
 import com.iba.springbootdeveloper.repository.BlogRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,10 +50,24 @@ public class BlogService {
         article.update(request.getTitle(), request.getContent());
         return article;
     }
-    public Page<Article> getList(int page) {
+    public Page<Article> getList(int page ,String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createdAt"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return blogRepository.findAll(pageable);
+        Specification<Article> spec = search(kw);
+        return blogRepository.findAll(spec, pageable);
+    }
+
+    private Specification<Article> search(String keyword) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);  // 중복 제거
+                return cb.or(cb.like(root.get("title"), "%" + keyword + "%"),  // 제목 검색
+                        cb.like(root.get("content"), "%" + keyword + "%"));  // 내용 검색
+            }
+        };
     }
 }

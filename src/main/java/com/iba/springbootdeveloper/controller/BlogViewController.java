@@ -18,9 +18,11 @@ public class BlogViewController {
     private final BlogService blogService;
 
     @GetMapping("/articles")
-    public String getArticles(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Article> paging = blogService.getList(page);
+    public String getArticles(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Article> paging = blogService.getList(page,kw  );
         model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
         model.addAttribute("currentPage", page); // To keep track of the current page
 
         return "articleList";
