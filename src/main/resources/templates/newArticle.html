@@ -34,6 +34,7 @@
                     <section class="mb-5">
                         <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${article.content}"></textarea>
                     </section>
+                    <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
                     <button th:if="${article.id} != null" type="button" id="modify-btn" class="btn btn-primary btn-sm">수정</button>
                     <button th:if="${article.id} == null" type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
                     <div class="mb-4"></div>

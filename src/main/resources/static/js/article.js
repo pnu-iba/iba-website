@@ -16,8 +16,8 @@ if (deleteButton) {
 
 // 하이퍼링크 변환 함수
 function transformLinks(text) {
-    var urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    return text.replace(urlPattern, function(url) {
+    const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(urlPattern, url => {
         return `<a href="${url}" target="_blank">${url}</a>`;
     });
 }
@@ -27,12 +27,17 @@ const modifyButton = document.getElementById('modify-btn');
 
 if (modifyButton) {
     modifyButton.addEventListener('click', event => {
-        let params = new URLSearchParams(location.search);
-        let id = params.get('id');
+        const id = document.getElementById('article-id').value;
+        const title = document.getElementById('title').value;
+        const contentElement = document.getElementById('content');
+        const content = contentElement.value;
+        const formattedContent = transformLinks(content.replace(/\n/g, '<br>'));
+        const category = document.getElementById('category').value;
 
-        let contentElement = document.getElementById('content');
-        let content = contentElement.value;
-        let formattedContent = transformLinks(content.replace(/\n/g, '<br>'));
+        if (!title || title.trim() === '') {
+            alert('제목은 필수 항목입니다.');
+            return;
+        }
 
         fetch(`/api/articles/${id}`, {
             method: 'PUT',
@@ -40,15 +45,21 @@ if (modifyButton) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                title: document.getElementById('title').value,
+                title: title,
                 content: formattedContent,
-                category: document.getElementById('category').value // 수정: value 속성으로 변경
+                category: category
             })
         })
-            .then(() => {
+        .then(response => {
+            if (response.ok) {
                 alert('수정이 완료되었습니다.');
                 location.replace(`/articles/${id}`);
-            });
+            } else {
+                return response.json().then(data => {
+                    alert(data.errorMessage || '수정 실패(글자 수 초과 및 기타)');
+                });
+            }
+        });
     });
 }
 
@@ -57,9 +68,16 @@ const createButton = document.getElementById('create-btn');
 
 if (createButton) {
     createButton.addEventListener('click', event => {
-        let contentElement = document.getElementById('content');
-        let content = contentElement.value;
-        let formattedContent = transformLinks(content.replace(/\n/g, '<br>'));
+        const title = document.getElementById('title').value;
+        const contentElement = document.getElementById('content');
+        const content = contentElement.value;
+        const formattedContent = transformLinks(content.replace(/\n/g, '<br>'));
+        const category = document.getElementById('category').value;
+
+        if (!title || title.trim() === '') {
+            alert('제목은 필수 항목입니다.');
+            return;
+        }
 
         fetch('/api/articles', {
             method: 'POST',
@@ -67,14 +85,20 @@ if (createButton) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                title: document.getElementById('title').value,
+                title: title,
                 content: formattedContent,
-                category: document.getElementById('category').value // 수정: value 속성으로 변경
+                category: category
             })
         })
-            .then(() => {
+        .then(response => {
+            if (response.ok) {
                 alert('등록 완료되었습니다.');
                 location.replace('/articles');
-            });
+            } else {
+                return response.json().then(data => {
+                    alert(data.errorMessage || '등록 실패(글자 수 초과 및 기타)');
+                });
+            }
+        });
     });
 }

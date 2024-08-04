@@ -54,9 +54,11 @@ class BlogApiControllerTest {
         final String url = "/api/articles";
         final String title = "title";
         final String content = "content";
+        final String category = "category";
         blogRepository.save(Article.builder()
                 .title(title)
                 .content(content)
+                .category(category)
                 .build());
 
         // when
@@ -100,14 +102,16 @@ class BlogApiControllerTest {
         final String url = "/api/articles/{id}";
         final String title = "title";
         final String content = "content";
+        final String category = "category";
         Article savedArticle = blogRepository.save(Article.builder()
                 .title(title)
                 .content(content)
+                .category(category)
                 .build());
         final String newTitle = "new title";
         final String newContent = "new content";
-        UpdateArticleRequest request = new UpdateArticleRequest(newTitle,
-                newContent);
+        final String newCategory = "category";
+        UpdateArticleRequest request = new UpdateArticleRequest(newTitle, newContent, newCategory);
 
         // when
         ResultActions result = mockMvc.perform(put(url, savedArticle.getId())
@@ -128,9 +132,11 @@ class BlogApiControllerTest {
         final String url = "/api/articles/{id}";
         final String title = "title";
         final String content = "content";
+        final String category = "category";
         Article savedArticle = blogRepository.save(Article.builder()
                 .title(title)
                 .content(content)
+                .category(category)
                 .build());
 
         // when
@@ -149,7 +155,8 @@ class BlogApiControllerTest {
         final String url = "/api/articles";
         final String title = "title";
         final String content = "content";
-        final AddArticleRequest userRequest = new AddArticleRequest(title, content);
+        final String category = "category";
+        final AddArticleRequest userRequest = new AddArticleRequest(title, content, category);
 
         final String requestBody = objectMapper.writeValueAsString(userRequest);
 
